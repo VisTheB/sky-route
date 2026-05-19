@@ -1,0 +1,92 @@
+<div class="dialog">
+  @let r = route();
+  <header class="dialog__header">
+    <div class="dialog__route">
+      <span class="dialog__city">
+        {{ firstSegment().departure_airport.city }}
+      </span>
+      <span class="dialog__arrow">→</span>
+      <span class="dialog__city">
+        {{ lastSegment().arrival_airport.city }}
+      </span>
+    </div>
+    <div class="dialog__meta">
+      <span>{{ r.departure_time | timeWithTz: 'yearmonthtime' }}</span>
+      <span>•</span>
+      <span>{{ connectionsLabel() }}</span>
+      <span>•</span>
+      <span>{{ r.total_duration_minutes | duration }}</span>
+      <span>•</span>
+      <span>{{ fareClass() }}</span>
+    </div>
+  </header>
+
+  <section class="dialog__segments">
+    @for (segment of r.segments; track segment.flight_id; let i = $index, last = $last) {
+      <div class="segment">
+        <div class="segment__times">
+          <div class="segment__time-block">
+            {{ segment.scheduled_departure | timeWithTz: 'monthtime' }}
+          </div>
+
+          <div class="segment__path">
+            <span class="segment__duration">
+              {{ segment.duration_minutes | duration }}
+            </span>
+          </div>
+
+          <div class="segment__time-block segment__time-block-right">
+            {{ segment.scheduled_arrival | timeWithTz: 'monthtime' }}
+          </div>
+        </div>
+
+        <div class="segment__airports">
+          <div class="segment__airport">
+            <span class="segment__code">
+              {{ segment.departure_airport.code }}
+            </span>
+            <span class="segment__city">
+              {{ segment.departure_airport.city }}
+            </span>
+          </div>
+
+          <div class="segment__flight">
+            <span class="segment__flight-no">{{ segment.route_no }}</span>
+          </div>
+
+          <div class="segment__airport segment__airport-right">
+            <span class="segment__code">
+              {{ segment.arrival_airport.code }}
+            </span>
+            <span class="segment__city">
+              {{ segment.arrival_airport.city }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      @if (!last) {
+        <div class="layover">
+          <span class="layover__icon">⏱</span>
+          <span class="layover__text">
+            Layover in {{ segment.arrival_airport.city }} -
+            {{ layoverMinutes(i) | duration }}
+          </span>
+        </div>
+      }
+    }
+  </section>
+
+  <footer class="dialog__footer">
+    <div class="dialog__price-block">
+      <span class="dialog__price-label">Total price</span>
+      <span class="dialog__price">
+        {{ r.total_price | number: '1.0-0' }}
+        {{ 'RUB' | tuiCurrency }}
+      </span>
+    </div>
+    <button tuiButton type="button" size="m" [disabled]="isBooking()" (click)="onBook()">
+      {{ isBooking() ? 'Booking...' : 'Book this flight' }}
+    </button>
+  </footer>
+</div>

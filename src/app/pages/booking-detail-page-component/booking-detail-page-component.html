@@ -1,0 +1,55 @@
+<div class="booking-detail__container">
+  <a routerLink="/bookings" class="booking-detail__back"> ← Back to bookings </a>
+
+  @if (bookingDetService.isLoading()) {
+    <div class="booking-detail__state">Loading booking...</div>
+  } @else if (bookingDetService.booking(); as booking) {
+    <section tuiCardLarge class="booking-detail__card">
+      <header class="header">
+        <h1 class="header__title">Booking №{{ booking.book_ref }}</h1>
+        <div class="header__meta">
+          <div class="header__row">
+            <span class="header__label">Created:</span>
+            <span class="header__value">
+              {{ booking.book_date | timeWithTz: 'yearmonthtime' }}
+            </span>
+          </div>
+          <div class="header__row">
+            <span class="header__label">Total:</span>
+            <span class="header__value">
+              {{ booking.total_amount | number: '1.0-0' }}
+              {{ 'RUB' | tuiCurrency }}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <div class="booking-detail__body">
+        <div class="booking-detail__column">
+          <h3 class="booking-detail__section-title">Passengers</h3>
+          <ul class="booking-detail__list">
+            @for (p of passengers(); track p.passenger_id) {
+              <li class="item">
+                <div class="item__name">{{ p.passenger_name }}</div>
+                <div class="item__id">passport {{ p.passenger_id }}</div>
+              </li>
+            }
+          </ul>
+        </div>
+
+        <div class="booking-detail__column">
+          <h3 class="booking-detail__section-title">Flights</h3>
+          <div class="booking-detail__flights">
+            @for (segment of segments(); track segment.flight_id) {
+              <app-flight-item-component
+                [segment]="segment"
+                [bookRef]="booking.book_ref"
+                [ticketNo]="booking.tickets[0].ticket_no"
+              />
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+</div>

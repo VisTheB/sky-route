@@ -1,0 +1,204 @@
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__route {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  &__arrow {
+    color: var(--color-text-primary);
+    font-weight: 400;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+  }
+
+  &__segments {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-text-primary);
+    flex-wrap: wrap;
+
+    button {
+      align-self: flex-end;
+      background-color: var(--color-primary);
+    }
+  }
+
+  &__price-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  &__price-label {
+    font-size: 0.75rem;
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+  }
+
+  &__price {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+.segment {
+  padding: 1rem 1.25rem;
+  background-color: var(--color-bg-dark);
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__times {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__time-block {
+    font-size: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--color-text-primary);
+
+    &-right {
+      text-align: end;
+    }
+  }
+
+  &__path {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__duration {
+    font-size: 0.8125rem;
+    color: var(--color-text-primary);
+  }
+
+  &__airports {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__airport {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+
+    &-right {
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
+
+  &__code {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  &__city {
+    font-size: 0.8125rem;
+    color: var(--color-text-primary);
+  }
+
+  &__flight {
+    text-align: center;
+  }
+
+  &__flight-no {
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+}
+
+.layover {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  background: var(--color-bg-primary);
+  border-radius: 0.5rem;
+  border: 1px dashed rgba(220, 170, 0, 0.4);
+
+  &__icon {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .dialog {
+    &__route {
+      font-size: 1.25rem;
+    }
+
+    &__footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__actions {
+      width: 100%;
+
+      button {
+        flex: 1;
+      }
+    }
+  }
+
+  .segment {
+    padding: 0.75rem;
+
+    &__time {
+      font-size: 1.125rem;
+    }
+
+    &__times,
+    &__airports {
+      grid-template-columns: 1fr auto 1fr;
+      gap: 0.5rem;
+    }
+  }
+}

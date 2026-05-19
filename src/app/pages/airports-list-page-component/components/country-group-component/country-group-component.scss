@@ -1,0 +1,99 @@
+.country {
+  background: #fff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.04);
+
+  &__header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+  }
+
+  &__name {
+    flex: 1;
+  }
+
+  &__count {
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    font-weight: 500;
+  }
+
+  &__header-open tui-icon {
+    transform: rotate(180deg);
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0 1.25rem 1.25rem;
+  }
+}
+
+.city {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  &__airports {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background-color: #fff;
+  border: 1px dashed rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
+
+  &:hover {
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary-hover);
+    border-style: solid;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &__name {
+    color: var(--color-text-primary);
+  }
+
+  &__code {
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+}

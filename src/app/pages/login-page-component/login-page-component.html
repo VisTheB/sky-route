@@ -1,0 +1,59 @@
+<div class="wrapper">
+  <form
+    appearance="floating"
+    tuiCardLarge
+    tuiForm="m"
+    [formGroup]="loginForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <h2>Login</h2>
+    <tui-textfield>
+      <label for="email" tuiLabel>Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="john@example.com"
+        tuiInput
+      />
+    </tui-textfield>
+    <tui-error formControlName="email" />
+    <tui-textfield>
+      <label for="password" tuiLabel>Password</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        placeholder="••••••••"
+        tuiInput
+      />
+    </tui-textfield>
+    <tui-error formControlName="password" />
+
+    <tui-error [error]="errorMessage()" />
+
+    <button
+      tuiButton
+      type="submit"
+      class="login__btn"
+      [disabled]="loginForm.invalid || isSubmitting()"
+    >
+      {{ isSubmitting() ? 'Logging in...' : 'Login' }}
+    </button>
+    <div class="login__divider">or</div>
+
+    <button
+      tuiButton
+      type="button"
+      class="login__btn"
+      (click)="loginWithGoogle()"
+      [disabled]="isSubmitting()"
+    >
+      Login with Google
+    </button>
+
+    <p class="login__register-link">
+      Don't have an account? <a routerLink="/register">Register</a>
+    </p>
+  </form>
+</div>

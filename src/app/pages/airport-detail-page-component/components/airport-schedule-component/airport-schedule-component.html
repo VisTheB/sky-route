@@ -1,0 +1,108 @@
+<section class="schedule">
+  @let service = airScheduleService;
+  <div class="schedule__tabs">
+    <button
+      type="button"
+      class="schedule__tab"
+      [class.schedule__tab-active]="service.activeTab() === 'outbound'"
+      (click)="onTabClick('outbound')"
+    >
+      Departures
+    </button>
+    <button
+      type="button"
+      class="schedule__tab"
+      [class.schedule__tab-active]="service.activeTab() === 'inbound'"
+      (click)="onTabClick('inbound')"
+    >
+      Arrivals
+    </button>
+  </div>
+
+  @if (service.error(); as err) {
+    <div class="schedule__error">{{ err }}</div>
+  }
+
+  @if (service.activeTab() === 'outbound') {
+    @if (outboundItems().length === 0 && !service.isLoading()) {
+      <div class="schedule__empty">No departures</div>
+    } @else {
+      <div class="table">
+        <div class="table__head">
+          <span class="table__cell table__cell-time">Time</span>
+          <span class="table__cell table__cell-flight">Flight</span>
+          <span class="table__cell table__cell-dest">Destination</span>
+          <span class="table__cell table__cell-status">Status</span>
+        </div>
+        <div class="table__body">
+          @for (item of outboundItems(); track $index) {
+            <button type="button" class="table__row" (click)="onOutboundClick(item)">
+              <span class="table__cell table__cell-time">
+                {{ item.departure_local | timeWithTz: 'yearmonthtime' }}
+              </span>
+              <span class="table__cell table__cell-flight">
+                {{ item.route_no }}
+              </span>
+              <span class="table__cell table__cell-dest">
+                <span class="table__dest-code">{{ item.destination_code }}</span>
+                <span class="table__dest-city">{{ item.destination_city }}</span>
+              </span>
+              <span class="table__cell table__cell-status">
+                <span class="status" [class]="statusClass(item.status)">
+                  {{ item.status }}
+                </span>
+              </span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  } @else {
+    @if (inboundItems().length === 0 && !service.isLoading()) {
+      <div class="schedule__empty">No arrivals</div>
+    } @else {
+      <div class="table">
+        <div class="table__head">
+          <span class="table__cell table__cell-time">Time</span>
+          <span class="table__cell table__cell-flight">Flight</span>
+          <span class="table__cell table__cell-dest">Origin</span>
+          <span class="table__cell table__cell-status">Status</span>
+        </div>
+        <div class="table__body">
+          @for (item of inboundItems(); track $index) {
+            <button type="button" class="table__row" (click)="onInboundClick(item)">
+              <span class="table__cell table__cell-time">
+                {{ item.arrival_local | timeWithTz: 'yearmonthtime' }}
+              </span>
+              <span class="table__cell table__cell-flight">
+                {{ item.route_no }}
+              </span>
+              <span class="table__cell table__cell-dest">
+                <span class="table__dest-code">{{ item.origin_code }}</span>
+                <span class="table__dest-city">{{ item.origin_city }}</span>
+              </span>
+              <span class="table__cell table__cell-status">
+                <span class="status" [class]="statusClass(item.status)">
+                  {{ item.status }}
+                </span>
+              </span>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  }
+
+  <div class="schedule__footer">
+    @if (service.isLoading()) {
+      <tui-loader />
+      <span class="schedule__loading">Loading...</span>
+    } @else if (service.hasMore()) {
+      <button tuiButton type="button" appearance="secondary" size="m" (click)="onLoadMore()">
+        Load more ({{ service.visibleCount() }} / {{ service.visibleTotal() }})
+      </button>
+    } @else if (service.visibleCount() > 0) {
+      <span class="schedule__total"> All {{ service.visibleTotal() }} flights loaded </span>
+    }
+  </div>
+</section>

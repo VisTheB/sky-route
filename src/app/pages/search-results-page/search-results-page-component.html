@@ -1,0 +1,81 @@
+<div class="search-results__container">
+  <div class="search-results__top">
+    @if (searchParams(); as params) {
+      <div class="search-results__summary">
+        <span class="search-results__route">
+          {{ params.from.toUpperCase() }} → {{ params.to.toUpperCase() }}
+        </span>
+        <span class="search-results__meta">{{ params.date }}</span>
+        <span> • </span>
+        <span class="search-results__meta">{{ params.class }}</span>
+      </div>
+    }
+
+    <button tuiButton type="button" appearance="secondary" size="m" (click)="toggleForm()">
+      {{ isFormOpen() ? 'Hide' : 'Edit search' }}
+    </button>
+  </div>
+
+  @if (isFormOpen()) {
+    <div class="search-results__form">
+      <app-search-form-component />
+    </div>
+  }
+
+  <div class="search-results__layout">
+    <aside class="search-results__filters">
+      <app-search-results-filters-component />
+    </aside>
+
+    <main class="search-results__list">
+      @if (searchResService.isLoading()) {
+        <div class="search-results__state">
+          <p>Searching for flights...</p>
+        </div>
+      } @else if (searchResService.error(); as errorMsg) {
+        <div class="search-results__state search-results__state-error">
+          <p>{{ errorMsg }}</p>
+          <button tuiButton type="button" appearance="primary" size="m" (click)="retrySearch()">
+            Try again
+          </button>
+        </div>
+      } @else if (searchResService.totalCount() === 0) {
+        <div class="search-results__state">
+          <h3>No flights found</h3>
+          <p>Try changing the dates or destinations.</p>
+        </div>
+      } @else if (searchResService.filteredCount() === 0) {
+        <div class="search-results__state">
+          <h3>No flights match your filters</h3>
+          <button
+            tuiButton
+            type="button"
+            appearance="secondary"
+            size="m"
+            (click)="resetFiltersAndRetry()"
+          >
+            Reset filters
+          </button>
+        </div>
+      } @else {
+        <div class="search-results__header">
+          <span class="search-results__count">
+            Found {{ searchResService.filteredCount() }}
+            @if (searchResService.filteredCount() !== searchResService.totalCount()) {
+              of {{ searchResService.totalCount() }}
+            }
+            {{ searchResService.filteredCount() === 1 ? 'flight' : 'flights' }}
+          </span>
+
+          <app-search-results-sort-component />
+        </div>
+
+        <div class="search-results__cards">
+          @for (route of searchResService.displayResults(); track $index) {
+            <app-route-card-component [route]="route" [fareClass]="searchParams()!.class" />
+          }
+        </div>
+      }
+    </main>
+  </div>
+</div>

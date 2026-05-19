@@ -1,0 +1,40 @@
+<!-- eslint-disable @angular-eslint/template/elements-content -->
+<section class="popular">
+  <h2 class="popular__heading">Popular destinations</h2>
+
+  <div class="popular__slider">
+    <button type="button" class="popular__arrow" (click)="prev()">‹</button>
+
+    <div class="popular__cards">
+      @for (card of visibleCards(); track card.title) {
+        <a
+          class="popular__card"
+          [routerLink]="['/routes/search']"
+          [queryParams]="{
+            from: 'Moscow',
+            to: card.title,
+            date: card.departure,
+            class: 'Economy',
+            max_connections: card.max_connections,
+          }"
+          [style.background-image]="'url(' + card.image + ')'"
+        >
+          <span class="popular__card-title">{{ card.title }}</span>
+        </a>
+      }
+    </div>
+
+    <button type="button" class="popular__arrow" (click)="next()">›</button>
+  </div>
+
+  <div class="popular__dots">
+    @for (_ of cards(); track $index) {
+      <button
+        type="button"
+        class="popular__dot"
+        [class.popular__dot-active]="$index === activeIndex()"
+        (click)="goTo($index)"
+      ></button>
+    }
+  </div>
+</section>

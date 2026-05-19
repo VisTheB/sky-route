@@ -1,0 +1,41 @@
+<div class="airports__container">
+  <header class="airports__header">
+    <h1 class="airports__title">Airports</h1>
+    <div class="airports__search">
+      <tui-textfield tuiTextfieldSize="m" iconStart="@tui.search">
+        <input
+          type="text"
+          [formControl]="searchControl"
+          placeholder="Search by code, name, city or country"
+          tuiInput
+        />
+      </tui-textfield>
+    </div>
+  </header>
+  @let service = AirListService;
+  @if (service.isLoading()) {
+    <tui-loader />
+    <div class="airports__state">Loading airports...</div>
+  } @else if (service.error(); as err) {
+    <div class="airports__state airports__state-error">{{ err }}</div>
+  } @else {
+    @if (service.searchQuery()) {
+      <div class="airports__meta">
+        Found {{ service.totalFoundAirports() }}
+        {{ service.totalFoundAirports() === 1 ? 'airport' : 'airports' }}
+      </div>
+    }
+    @if (service.filtered().length === 0) {
+      <div class="airports__state">Nothing found</div>
+    } @else {
+      <div class="airports__countries">
+        @for (country of service.filtered(); track country.country) {
+          <app-country-group-component
+            [country]="country"
+            [forceExpanded]="!!service.searchQuery()"
+          />
+        }
+      </div>
+    }
+  }
+</div>

@@ -1,0 +1,63 @@
+<div class="wrapper">
+  <form
+    appearance="floating"
+    tuiCardLarge
+    tuiForm="m"
+    [formGroup]="regForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <h2>Register</h2>
+    <tui-textfield>
+      <label for="email" tuiLabel>Email</label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="john@example.com"
+        tuiInput
+      />
+    </tui-textfield>
+    <tui-error formControlName="email" />
+    <tui-textfield>
+      <label for="password" tuiLabel>Password</label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        placeholder="••••••••"
+        tuiInput
+      />
+    </tui-textfield>
+    <tui-error formControlName="password" />
+    <tui-textfield>
+      <label for="confirmPassword" tuiLabel>Confirm Password</label>
+      <input
+        id="confirmPassword"
+        type="password"
+        formControlName="confirmPassword"
+        placeholder="••••••••"
+        tuiInput
+      />
+    </tui-textfield>
+    <tui-error formControlName="confirmPassword" />
+
+    <tui-error [error]="errorMessage()" />
+
+    <button tuiButton type="submit" class="reg__btn" [disabled]="regForm.invalid || isSubmitting()">
+      {{ isSubmitting() ? 'Creating account...' : 'Register' }}
+    </button>
+    <div class="reg__divider">or</div>
+
+    <button
+      tuiButton
+      type="button"
+      class="reg__btn"
+      (click)="loginWithGoogle()"
+      [disabled]="isSubmitting()"
+    >
+      Login with Google
+    </button>
+
+    <p class="reg__login-link">Already have an account? <a routerLink="/login">Login</a></p>
+  </form>
+</div>

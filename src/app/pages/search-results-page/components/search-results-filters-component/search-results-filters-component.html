@@ -1,0 +1,68 @@
+<aside class="filters">
+  <header class="filters__header">
+    <h3 class="filters__title">Filters</h3>
+    <button tuiButton type="button" appearance="flat" size="xs" (click)="onReset()">Reset</button>
+  </header>
+
+  @if (!hasResults()) {
+    <p class="filters__empty">No data to filter</p>
+  } @else {
+    <section class="filters__section">
+      <tui-textfield>
+        <label for="price" tuiLabel>Max price</label>
+        <input
+          id="price"
+          tuiInputSlider
+          [min]="priceMin()"
+          [max]="priceMaxLimit()"
+          [tuiNumberFormat]="{
+            thousandSeparator: ' ',
+            precision: 0,
+          }"
+          [ngModel]="priceMax()"
+          (ngModelChange)="onPriceChange($event)"
+        />
+        <input tuiSlider type="range" />
+      </tui-textfield>
+      <div class="filters__hint">from {{ priceMin() }} to {{ priceMaxLimit() }} ₽</div>
+    </section>
+
+    <section class="filters__section">
+      <tui-textfield>
+        <label for="duration" tuiLabel>Max duration (min)</label>
+        <input
+          id="duration"
+          tuiInputSlider
+          [min]="durationMinLimit()"
+          [max]="durationMaxLimit()"
+          [ngModel]="durationMax()"
+          (ngModelChange)="onDurationChange($event)"
+        />
+        <input tuiSlider type="range" />
+      </tui-textfield>
+      <div class="filters__hint">up to {{ durationMax() | duration }}</div>
+    </section>
+
+    @if (availableConnections().length > 1) {
+      <section class="filters__section">
+        <h4 class="filters__section-title">Stops</h4>
+        <ul class="filters__list">
+          @for (count of availableConnections(); track count) {
+            <li class="filters__item">
+              <label class="filters__label" for="connection-{{ count }}" tuiLabel>
+                <input
+                  id="connection-{{ count }}"
+                  tuiCheckbox
+                  type="checkbox"
+                  [ngModel]="isConnectionChecked(count)"
+                  (ngModelChange)="onConnectionToggle(count, $event)"
+                />
+                <span>{{ connectionLabel(count) }}</span>
+              </label>
+            </li>
+          }
+        </ul>
+      </section>
+    }
+  }
+</aside>

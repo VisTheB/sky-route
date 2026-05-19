@@ -1,0 +1,47 @@
+<div class="bookings__container">
+  <h1 class="bookings__title">My bookings</h1>
+
+  @switch (bookingsListService.state()) {
+    @case ('idle') {
+      <div class="bookings__state">Loading...</div>
+    }
+
+    @case ('loading') {
+      <div class="bookings__state">Loading bookings...</div>
+    }
+
+    @case ('no-passport') {
+      <section tuiCardLarge class="bookings__notice">
+        <h3 class="bookings__notice-title">Passport data required</h3>
+        <p class="bookings__notice-text">
+          We need your passport data to find your bookings. Please fill it in on your profile page.
+        </p>
+        <button tuiButton type="button" size="m" (click)="goToProfile()">Go to profile</button>
+      </section>
+    }
+
+    @case ('error') {
+      <section tuiCardLarge class="bookings__notice bookings__notice-error">
+        <p class="bookings__notice-text">{{ bookingsListService.errorMessage() }}</p>
+        <button tuiButton type="button" size="m" appearance="secondary" (click)="onRetry()">
+          Try again
+        </button>
+      </section>
+    }
+
+    @case ('loaded') {
+      @if (bookingsListService.bookings().length === 0) {
+        <section tuiCardLarge class="bookings__notice">
+          <h3 class="bookings__notice-title">No bookings yet</h3>
+          <p class="bookings__notice-text">Once you book a flight, it will appear here.</p>
+        </section>
+      } @else {
+        <div class="bookings__list">
+          @for (booking of bookingsListService.bookings(); track booking.book_ref) {
+            <app-booking-card-component [booking]="booking" />
+          }
+        </div>
+      }
+    }
+  }
+</div>

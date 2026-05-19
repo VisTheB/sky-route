@@ -1,0 +1,56 @@
+<button type="button" class="route-card" (click)="onSelect()">
+  @let r = route();
+  <div class="route-card__main">
+    <div class="route-card__times">
+      <div class="route-card__segment">
+        <span class="route-card__time">
+          {{ r.departure_time | timeWithTz }}
+        </span>
+        <span class="route-card__code">
+          {{ firstSegment().departure_airport.code }}
+        </span>
+        <span class="route-card__city">
+          {{ firstSegment().departure_airport.city }}
+        </span>
+      </div>
+
+      <div class="route-card__path">
+        <span class="route-card__duration">
+          {{ r.total_duration_minutes | duration }}
+        </span>
+        <div class="route-card__line">
+          <span class="route-card__dot"></span>
+          <span class="route-card__arrow"></span>
+          <span class="route-card__dot"></span>
+        </div>
+        <span class="route-card__stops">{{ connectionsLabel() }}</span>
+      </div>
+
+      <div class="route-card__segment route-card__segment-right">
+        <span class="route-card__time">
+          {{ r.arrival_time | timeWithTz }}
+        </span>
+        <span class="route-card__code">
+          {{ lastSegment().arrival_airport.code }}
+        </span>
+        <span class="route-card__city">
+          {{ lastSegment().arrival_airport.city }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="route-card__footer">
+    <span class="route-card__flight-no">
+      {{ firstSegment().route_no }}
+    </span>
+
+    <div class="route-card__price-block">
+      <span class="route-card__price-label">Total: </span>
+      <span class="route-card__price">
+        {{ r.total_price | number: '1.0-0' }}
+        {{ 'RUB' | tuiCurrency }}
+      </span>
+    </div>
+  </div>
+</button>

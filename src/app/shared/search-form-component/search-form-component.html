@@ -1,0 +1,78 @@
+<form tuiForm="m" class="search-form" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+  <div class="search-form__row">
+    <div class="search-form__field search-form__field--city">
+      <tui-textfield tuiTextfieldSize="l">
+        <label for="from" tuiLabel>From</label>
+        <input type="text" id="from" formControlName="from" placeholder="AER" tuiInput />
+      </tui-textfield>
+      <tui-error formControlName="from" />
+    </div>
+
+    <div class="search-form__field search-form__field--city">
+      <tui-textfield tuiTextfieldSize="l">
+        <label for="to" tuiLabel>To</label>
+        <input type="text" id="to" formControlName="to" placeholder="Moscow" tuiInput />
+      </tui-textfield>
+      <tui-error formControlName="to" />
+    </div>
+
+    <div class="search-form__field search-form__field--date">
+      <tui-textfield tuiTextfieldSize="l">
+        <label for="date" tuiLabel>Date</label>
+        <input
+          id="date"
+          tuiInputDate
+          type="date"
+          [max]="maxDate()"
+          [min]="minDate()"
+          (focusin)="onDateFocus()"
+          formControlName="date"
+        />
+        <tui-calendar *tuiDropdown />
+      </tui-textfield>
+      <tui-error formControlName="date" />
+    </div>
+
+    <div class="search-form__field search-form__field--select">
+      <tui-textfield tuiChevron [stringify]="stringifyFare" tuiTextfieldSize="l">
+        <label for="class" tuiLabel>Class</label>
+        <input id="class" tuiSelect formControlName="class" />
+
+        <tui-data-list *tuiDropdown>
+          @for (item of fareConditions; track item) {
+            <button tuiOption type="button" [value]="item">
+              {{ fareLabels[item] }}
+            </button>
+          }
+        </tui-data-list>
+      </tui-textfield>
+      <tui-error formControlName="class" />
+    </div>
+
+    <div class="search-form__field search-form__field--select">
+      <tui-textfield tuiChevron [stringify]="stringifyConnections" tuiTextfieldSize="l">
+        <label for="max_connections" tuiLabel>Stops</label>
+        <input id="max_connections" tuiSelect formControlName="max_connections" />
+
+        <tui-data-list *tuiDropdown>
+          @for (item of maxConnectionsOptions; track item) {
+            <button tuiOption type="button" [value]="item">
+              {{ connectionsLabels[item] }}
+            </button>
+          }
+        </tui-data-list>
+      </tui-textfield>
+      <tui-error formControlName="max_connections" />
+    </div>
+
+    <button
+      tuiButton
+      type="submit"
+      class="search-form__submit"
+      [disabled]="searchForm.invalid || isSubmitting()"
+      size="l"
+    >
+      Search
+    </button>
+  </div>
+</form>

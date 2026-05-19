@@ -1,0 +1,47 @@
+<article class="flight">
+  <div class="flight__main">
+    <div class="flight__no">{{ segment().flight_no }}</div>
+    <div class="flight__date">
+      {{ segment().scheduled_departure | timeWithTz: 'yearmonthtime' }}
+    </div>
+    <div class="flight__route">
+      <span class="flight__time">
+        {{ segment().scheduled_departure | timeWithTz: 'time' }}
+      </span>
+      <span class="flight__code">{{ segment().departure_airport }}</span>
+      <span class="flight__arrow">→</span>
+      <span class="flight__time">
+        {{ segment().scheduled_arrival | timeWithTz: 'time' }}
+      </span>
+      <span class="flight__code">{{ segment().arrival_airport }}</span>
+    </div>
+    <div class="flight__class">{{ segment().fare_conditions }}</div>
+  </div>
+
+  <div class="flight__action">
+    @if (hasBoardingPass()) {
+      <button
+        class="flight__action-pass"
+        tuiButton
+        type="button"
+        size="m"
+        appearance="secondary"
+        (click)="openCheckInDialog()"
+      >
+        Boarding pass
+      </button>
+    } @else if (checkInStatus() === 'available') {
+      <button
+        class="flight__action-checkin"
+        tuiButton
+        type="button"
+        size="m"
+        (click)="openCheckInDialog()"
+      >
+        Online check-in
+      </button>
+    } @else if (checkInStatus() === 'not-yet' || checkInStatus() === 'closed') {
+      <span class="flight__hint">{{ checkInHint() }}</span>
+    }
+  </div>
+</article>

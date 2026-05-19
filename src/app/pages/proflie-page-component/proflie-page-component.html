@@ -1,0 +1,106 @@
+<div class="profile__container">
+  <section class="profile__card" style="flex-grow: 1; align-self: flex-start">
+    <header class="profile__header">
+      <h1 class="profile__title">My profile</h1>
+      <button tuiButton type="button" appearance="secondary" size="m" (click)="onLogout()">
+        Log out
+      </button>
+    </header>
+
+    <div class="profile__info">
+      @if (profileService.isLoading()) {
+        <p class="profile__loading">Loading...</p>
+      } @else {
+        <div class="profile__info-row">
+          <span class="profile__info-label">Email:</span>
+          <span class="profile__info-value">{{ email() }}</span>
+        </div>
+        @if (createdAtFormatted()) {
+          <div class="profile__info-row">
+            <span class="profile__info-label">Registered:</span>
+            <span class="profile__info-value">{{ createdAtFormatted() }}</span>
+          </div>
+        }
+      }
+    </div>
+  </section>
+
+  <section tuiCardLarge class="profile__card" style="flex-grow: 2">
+    <h2 class="profile__subtitle">Passport data</h2>
+    <form tuiForm="m" class="profile__form" [formGroup]="passportForm" (ngSubmit)="onSave()">
+      <div class="profile__field">
+        <tui-textfield tuiTextfieldSize="l">
+          <label for="lastName" tuiLabel>Last name</label>
+          <input
+            id="lastName"
+            type="text"
+            formControlName="lastName"
+            placeholder="Ivanov"
+            tuiInput
+          />
+        </tui-textfield>
+        <tui-error formControlName="lastName" />
+      </div>
+
+      <div class="profile__field">
+        <tui-textfield tuiTextfieldSize="l">
+          <label for="firstName" tuiLabel>First name</label>
+          <input
+            id="firstName"
+            type="text"
+            formControlName="firstName"
+            placeholder="Ivan"
+            tuiInput
+          />
+        </tui-textfield>
+        <tui-error formControlName="firstName" />
+      </div>
+
+      <div class="profile__field">
+        <tui-textfield tuiTextfieldSize="l">
+          <label for="middleName" tuiLabel>Middle name (optional)</label>
+          <input
+            id="middleName"
+            type="text"
+            formControlName="middleName"
+            placeholder="Ivanovich"
+            tuiInput
+          />
+        </tui-textfield>
+      </div>
+
+      <div class="profile__field">
+        <tui-textfield tuiTextfieldSize="l">
+          <label for="birthDate" tuiLabel>Date of birth</label>
+          <input id="birthDate" tuiInputDate type="date" formControlName="birthDate" />
+          <tui-calendar *tuiDropdown />
+        </tui-textfield>
+        <tui-error formControlName="birthDate" />
+      </div>
+
+      <div class="profile__field">
+        <tui-textfield tuiTextfieldSize="l">
+          <label for="passportNumber" tuiLabel>Passport (series + number)</label>
+          <input
+            id="passportNumber"
+            type="text"
+            formControlName="passportNumber"
+            placeholder="1234 567890"
+            tuiInput
+          />
+        </tui-textfield>
+        <tui-error formControlName="passportNumber" />
+      </div>
+
+      <button
+        tuiButton
+        type="submit"
+        size="m"
+        class="profile__submit"
+        [disabled]="passportForm.invalid || isSubmitting()"
+      >
+        {{ isSubmitting() ? 'Saving...' : 'Save' }}
+      </button>
+    </form>
+  </section>
+</div>

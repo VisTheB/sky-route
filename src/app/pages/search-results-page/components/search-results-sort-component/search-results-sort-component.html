@@ -1,0 +1,19 @@
+<div class="sort">
+  <tui-textfield
+    tuiChevron
+    tuiTextfieldSize="l"
+    class="sort__field"
+    [tuiTextfieldCleaner]="false"
+    [stringify]="stringify"
+  >
+    <label for="sort" tuiLabel>Sort by:</label>
+    <input id="sort" tuiSelect [ngModel]="service.sort()" (ngModelChange)="onChange($event)" />
+    <tui-data-list *tuiDropdown>
+      @for (option of options; track option.key) {
+        <button tuiOption type="button" [value]="option.key">
+          {{ option.label }}
+        </button>
+      }
+    </tui-data-list>
+  </tui-textfield>
+</div>

@@ -1,0 +1,104 @@
+@if (mode() === 'pass') {
+  @if (boardingPass(); as pass) {
+    <div class="pass">
+      <div class="pass__badge">Boarding pass</div>
+      <div class="pass__flight">
+        <span class="pass__flight-no">{{ context.data.flight_no }}</span>
+      </div>
+
+      <div class="pass__grid">
+        <div class="pass__field">
+          <span class="pass__label">Seat</span>
+          <span class="pass__value pass__value-large">{{ pass.seat_no }}</span>
+        </div>
+        <div class="pass__field">
+          <span class="pass__label">Class</span>
+          <span class="pass__value">{{ pass.fare_conditions }}</span>
+        </div>
+        <div class="pass__field pass__field-wide">
+          <span class="pass__label">Ticket</span>
+          <span class="pass__value pass__value">{{ pass.ticket_no }}</span>
+        </div>
+      </div>
+      <footer class="footer">
+        <button
+          tuiButton
+          type="button"
+          appearance="secondary"
+          size="m"
+          [disabled]="isSubmitting()"
+          (click)="onClose()"
+        >
+          Close
+        </button>
+      </footer>
+    </div>
+  }
+} @else {
+  <div class="checkin">
+    <header class="checkin__header">
+      <h2 class="checkin__title">Check in for {{ context.data.flight_no }}</h2>
+      <p class="checkin__hint">Select a seat or skip to get an auto-assigned one.</p>
+    </header>
+
+    @if (isLoading()) {
+      <div class="checkin__loader">
+        <tui-loader />
+      </div>
+    } @else {
+      <div class="checkin__map">
+        @for (rowGroup of seatRows(); track rowGroup.row) {
+          <div class="row">
+            <div class="row__number">{{ rowGroup.row }}</div>
+            <div class="row__seats">
+              @for (seat of rowGroup.seats; track seat.seat_no) {
+                <button
+                  type="button"
+                  class="seat"
+                  [class.seat-unavailable]="!seat.available"
+                  [class.seat-selected]="isSeatSelected(seat.seat_no)"
+                  [disabled]="!seat.available"
+                  (click)="onSeatClick(seat)"
+                >
+                  {{ seat.seat_no | slice: -1 }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="legend">
+        <span class="legend__item"> <span class="seat seat-demo"></span> Available </span>
+        <span class="legend__item">
+          <span class="seat seat-selected seat-demo"></span> Selected
+        </span>
+        <span class="legend__item">
+          <span class="seat seat-unavailable seat-demo"></span> Taken
+        </span>
+      </div>
+
+      <footer class="footer">
+        <button
+          tuiButton
+          type="button"
+          appearance="secondary"
+          size="m"
+          [disabled]="isSubmitting()"
+          (click)="onClose()"
+        >
+          Cancel
+        </button>
+        <button tuiButton type="button" size="m" [disabled]="isSubmitting()" (click)="onSubmit()">
+          @if (isSubmitting()) {
+            Registering...
+          } @else if (selectedSeat()) {
+            Check in to seat {{ selectedSeat() }}
+          } @else {
+            Auto-assign seat
+          }
+        </button>
+      </footer>
+    }
+  </div>
+}

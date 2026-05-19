@@ -1,0 +1,23 @@
+@let currBooking = booking();
+<a class="card" [routerLink]="['/bookings', currBooking.book_ref]">
+  <div class="card__main">
+    <header class="card__header">
+      <span class="card__ref">№{{ currBooking.book_ref }}</span>
+      <span class="card__route">
+        {{ currBooking.departure_city }} - {{ currBooking.arrival_city }}
+      </span>
+    </header>
+
+    <div class="card__date">
+      {{ currBooking.book_date | timeWithTz: 'yearmonthtime' }}
+    </div>
+
+    <footer class="card__footer">
+      <span class="card__meta"> {{ passengersLabel() }}, {{ fareLabel() }} </span>
+      <span class="card__price">
+        {{ currBooking.total_amount | number: '1.0-0' }}
+        {{ 'RUB' | tuiCurrency }}
+      </span>
+    </footer>
+  </div>
+</a>

@@ -1,0 +1,87 @@
+.airport {
+  &__container {
+    margin: 0 auto;
+    max-width: 50rem;
+    padding: 1.5rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  &__back {
+    align-self: flex-start;
+    color: var(--color-text-primary);
+    font-size: 1.1rem;
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  &__header {
+    padding: 1.5rem;
+    font-size: 2rem;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  &__location {
+    font-size: 1.2rem;
+    color: var(--color-text-primary);
+  }
+
+  &__meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+  }
+
+  &__coords {
+    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-size: 1rem;
+  }
+
+  &__divider {
+    color: var(--color-primary);
+  }
+
+  &__state {
+    padding: 3rem;
+    text-align: center;
+    background: #fff;
+    border-radius: 0.75rem;
+    color: var(--color-text-primary);
+
+    &-error {
+      color: var(--color-error);
+    }
+  }
+
+  &__schedule {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .airport {
+    padding: 1rem;
+
+    &__title {
+      font-size: 1.25rem;
+    }
+  }
+}

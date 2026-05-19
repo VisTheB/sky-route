@@ -1,0 +1,25 @@
+<div class="airport__container">
+  <a routerLink="/airports" class="airport__back">← Back to airports</a>
+
+  @if (isLoading()) {
+    <tui-loader />
+    <div class="airport__state">Loading...</div>
+  } @else if (error(); as err) {
+    <div class="airport__state airport__state-error">{{ err }}</div>
+  } @else if (airport(); as data) {
+    <section tuiCardLarge class="airport__header">
+      <div class="airport__info">
+        <h1 class="airport__title">{{ data.airport_name }} ({{ data.airport_code }})</h1>
+        <div class="airport__location">{{ data.city }}, {{ data.country }}</div>
+        <div class="airport__meta">
+          <span class="airport__coords">{{ coordinatesLabel() }}</span>
+          <span class="airport__divider">•</span>
+          <span class="airport__tz"> {{ data.timezone.offset }} ({{ data.timezone.name }}) </span>
+        </div>
+      </div>
+    </section>
+    <section tuiCardLarge class="airport__schedule">
+      <app-airport-schedule-component [airportCode]="data.airport_code" />
+    </section>
+  }
+</div>

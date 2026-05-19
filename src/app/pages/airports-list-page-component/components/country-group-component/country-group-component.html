@@ -1,0 +1,31 @@
+<section class="country">
+  @let c = country();
+  <button
+    type="button"
+    class="country__header"
+    [class.country__header-open]="isExpanded()"
+    (click)="toggle()"
+  >
+    <span class="country__name">{{ c.country }}</span>
+    <span class="country__count">{{ c.cities.length }}</span>
+    <tui-icon icon="@tui.arrow-down" />
+  </button>
+
+  @if (isExpanded()) {
+    <div class="country__body">
+      @for (city of c.cities; track city.city) {
+        <div class="city">
+          <h3 class="city__name">{{ city.city }}</h3>
+          <div class="city__airports">
+            @for (airport of city.airports; track airport.airport_code) {
+              <a class="chip" [routerLink]="['/airports', airport.airport_code]">
+                <span class="chip__name">{{ airport.airport_name }}</span>
+                <span class="chip__code">{{ airport.airport_code }}</span>
+              </a>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>
