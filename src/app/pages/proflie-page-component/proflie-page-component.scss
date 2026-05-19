@@ -98,6 +98,16 @@
 @media (max-width: 40rem) {
   .profile {
     padding: 1rem;
+    &__container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__card {
+      align-self: unset;
+      justify-content: space-between;
+      flex-direction: row;
+    }
 
     &__header {
       flex-direction: column;
