@@ -6,6 +6,18 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 declare const ym: any;
 
+window.addEventListener('error', (event) => {
+  if (event.filename?.includes('mc.yandex.ru')) {
+    event.stopImmediatePropagation();
+  }
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  if (event.reason?.stack?.includes('mc.yandex.ru')) {
+    event.preventDefault();
+  }
+});
+
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, TuiRoot],
