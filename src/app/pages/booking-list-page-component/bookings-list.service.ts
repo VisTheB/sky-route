@@ -1,4 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
+import * as Sentry from '@sentry/angular';
 import { BookingError, BookingsService } from '../../core/services';
 import { BookingSummary } from '../../core/models/booking.model';
 
@@ -25,6 +26,7 @@ export class BookingsListService {
         this.state.set('no-passport');
         return;
       }
+      Sentry.captureException(error);
       console.error('Failed to load bookings', error);
       this.errorMessage.set('Failed to load bookings. Please try again.');
       this.state.set('error');

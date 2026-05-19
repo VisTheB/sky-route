@@ -3,6 +3,7 @@ import { AirportScheduleService } from '../../airport-schedule.service';
 import { TuiButton, TuiLoader, TuiNotificationService } from '@taiga-ui/core';
 import { TimeWithTimezonePipe } from '../../../../shared/pipes';
 import { Router } from '@angular/router';
+import { AnalyticsService } from '../../../../core/services';
 import {
   ScheduleTab,
   OutboundFlightEntry,
@@ -21,6 +22,7 @@ export class AirportScheduleComponent {
   protected readonly notifications = inject(TuiNotificationService);
   protected airScheduleService = inject(AirportScheduleService);
   private router = inject(Router);
+  private analytics = inject(AnalyticsService);
 
   airportCode = input.required<string>();
   protected outboundItems = computed(() => this.airScheduleService.outboundItems());
@@ -45,6 +47,7 @@ export class AirportScheduleComponent {
         .subscribe();
       return;
     }
+    this.analytics.airportScheduleFlightClicked();
     this.navigateToSearch({
       from: this.airportCode(),
       to: item.destination_code,
@@ -63,6 +66,7 @@ export class AirportScheduleComponent {
         .subscribe();
       return;
     }
+    this.analytics.airportScheduleFlightClicked();
     this.navigateToSearch({
       from: item.origin_code,
       to: this.airportCode(),

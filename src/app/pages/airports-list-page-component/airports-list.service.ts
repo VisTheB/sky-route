@@ -1,4 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
+import * as Sentry from '@sentry/angular';
 import { AirportsService } from '../../core/services';
 import { CountryAirports, CountryView, CityView, AirportCityRef } from '../../core/models';
 import { TuiNotificationService } from '@taiga-ui/core';
@@ -72,6 +73,7 @@ export class AirportsListService {
       const data = await this.airportsService.listAirports();
       this.raw.set(data);
     } catch (err) {
+      Sentry.captureException(err);
       console.error('Failed to load airports', err);
       this.error.set('Failed to load airports list');
       this.notifications

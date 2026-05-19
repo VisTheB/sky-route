@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { TuiButton, TuiNotificationService, type TuiDialogContext } from '@taiga-ui/core';
+import * as Sentry from '@sentry/angular';
 import { TuiCurrencyPipe } from '@taiga-ui/addon-commerce';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import { DecimalPipe } from '@angular/common';
 import { RouteOption, FareConditions, RouteSegment } from '../../../../core/models';
 import { TimeWithTimezonePipe, DurationPipe } from '../../../../shared/pipes';
-import { BookingsService, BookingError } from '../../../../core/services';
+import { BookingsService, BookingError, AnalyticsService } from '../../../../core/services';
 
 export type RouteDetailsDialogData = {
   route: RouteOption;
@@ -29,6 +30,7 @@ export class RouteDetailsDialogComponent {
   protected readonly notifications = inject(TuiNotificationService);
   private router = inject(Router);
   private bookingsService = inject(BookingsService);
+  private analytics = inject(AnalyticsService);
 
   protected isBooking = signal(false);
   protected route = computed(() => this.context.data.route);
@@ -47,6 +49,7 @@ export class RouteDetailsDialogComponent {
   protected async onBook() {
     if (this.isBooking()) return;
 
+    this.analytics.bookingStarted();
     this.isBooking.set(true);
     try {
       const booking = await this.bookingsService.createBookingForCurrentUser(
@@ -54,6 +57,7 @@ export class RouteDetailsDialogComponent {
         this.fareClass(),
       );
 
+      this.analytics.bookingCompleted();
       this.context.$implicit.complete();
       this.router.navigate(['/bookings', booking.book_ref]);
     } catch (error) {
@@ -68,6 +72,7 @@ export class RouteDetailsDialogComponent {
   }
 
   private handleBookingError(error: unknown) {
+    this.analytics.bookingFailed();
     if (error instanceof BookingError && error.code === 'NO_PASSPORT') {
       this.context.$implicit.complete();
       this.notifications
@@ -81,10 +86,11 @@ export class RouteDetailsDialogComponent {
     }
 
     console.error('Booking failed', error);
+    Sentry.captureException(error);
     this.notifications
       .open('Failed to create booking. Please try again.', {
         label: 'Error',
-        autoClose: 3000,
+        autoClose: 4000,
       })
       .subscribe();
   }

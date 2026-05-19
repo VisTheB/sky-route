@@ -11,7 +11,7 @@ import {
   FareConditions,
   BoardingPass,
 } from '../../../../core/models';
-import { NowService } from '../../../../core/services';
+import { NowService, AnalyticsService } from '../../../../core/services';
 import { CheckinDialogComponent } from '../checkin-dialog-component/checkin-dialog-component';
 
 @Component({
@@ -26,6 +26,7 @@ export class FlightItemComponent {
   ticketNo = input.required<string>();
   private nowService = inject(NowService);
   private dialogs = inject(TuiDialogService);
+  private analytics = inject(AnalyticsService);
 
   private now = signal<Date | null>(null);
   private localHasBoardingPass = signal(false);
@@ -81,6 +82,7 @@ export class FlightItemComponent {
   }
 
   protected openCheckInDialog() {
+    this.analytics.onlineCheckinStarted();
     const data: CheckInDialogData = {
       ticket_no: this.ticketNo(),
       flight_id: this.segment().flight_id,

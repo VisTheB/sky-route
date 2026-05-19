@@ -1,6 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { SlicePipe } from '@angular/common';
+import * as Sentry from '@sentry/angular';
 import {
   TuiButton,
   TuiNotificationService,
@@ -9,7 +10,7 @@ import {
 } from '@taiga-ui/core';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import { BoardingPass, CheckInDialogData, AvailableSeat, Mode } from '../../../../core/models';
-import { CheckinService } from '../../../../core/services';
+import { CheckinService, AnalyticsService } from '../../../../core/services';
 
 @Component({
   selector: 'app-checkin-dialog-component',
@@ -21,6 +22,7 @@ export class CheckinDialogComponent {
   protected readonly context =
     injectContext<TuiDialogContext<BoardingPass | null, CheckInDialogData>>();
   private checkinService = inject(CheckinService);
+  private analytics = inject(AnalyticsService);
   protected readonly notifications = inject(TuiNotificationService);
 
   protected isLoading = signal(false);
@@ -76,6 +78,7 @@ export class CheckinDialogComponent {
         } else if (status === 401) {
           this.processError('Unauthorized. Please log in again.', 'Unauthorized');
         } else {
+          Sentry.captureException(error);
           this.processError('Failed to load boarging pass. Please try again.', 'Error');
         }
       } finally {
@@ -93,6 +96,7 @@ export class CheckinDialogComponent {
         } else if (status === 401) {
           this.processError('Unauthorized. Please log in again.', 'Unauthorized');
         } else {
+          Sentry.captureException(error);
           this.processError('Failed to load seats. Please try again.', 'Error');
         }
       } finally {
@@ -121,6 +125,7 @@ export class CheckinDialogComponent {
         seat_no: this.selectedSeat() ?? undefined,
       });
       this.boardingPass.set(pass);
+      this.analytics.onlineCheckinCompleted();
       this.context.$implicit.next(pass);
       this.mode.set('pass');
       this.notifications
@@ -146,6 +151,7 @@ export class CheckinDialogComponent {
       } else if (status === 404) {
         this.processError('Flight or ticket not found.', 'Not found');
       } else {
+        Sentry.captureException(error);
         this.processError('Check-in failed. Please try again.', 'Error');
       }
     } finally {

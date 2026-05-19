@@ -5,6 +5,7 @@ import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
 import { DecimalPipe } from '@angular/common';
 import { FareConditions, RouteOption } from '../../../../core/models';
 import { DurationPipe, TimeWithTimezonePipe } from '../../../../shared/pipes';
+import { AnalyticsService } from '../../../../core/services';
 import {
   RouteDetailsDialogComponent,
   RouteDetailsDialogData,
@@ -18,6 +19,7 @@ import {
 })
 export class RouteCardComponent {
   private dialogs = inject(TuiDialogService);
+  private analytics = inject(AnalyticsService);
 
   route = input.required<RouteOption>();
   fareClass = input.required<FareConditions>();
@@ -36,6 +38,7 @@ export class RouteCardComponent {
   });
 
   protected onSelect() {
+    this.analytics.routeCardClicked();
     const data: RouteDetailsDialogData = {
       route: this.route(),
       fareClass: this.fareClass(),

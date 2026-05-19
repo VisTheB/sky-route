@@ -8,5 +8,8 @@ export const firebaseConfig = {
   measurementId: 'G-4V9V0LXVH2',
 };
 
+export const hawkTrackerDsn =
+  'https://5ba48d7b4b014a48bb2b4e58c3014480fb175685446c4a7d8ed4b0063edd2e40@k1.hawk.so/0';
+
 export const apiUrl = 'https://sky-route-back.relaxdev.ru/api/';
 //export const apiUrl = 'http://localhost:3000/api/';

@@ -1,7 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { TuiNotificationService } from '@taiga-ui/core/components/notification';
 import { HttpErrorResponse } from '@angular/common/http';
-import { BookingsService } from '../../core/services';
+import * as Sentry from '@sentry/angular';
+import { BookingsService, AnalyticsService } from '../../core/services';
 import { Booking } from '../../core/models';
 import { Router } from '@angular/router';
 
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
 export class BookingDetailService {
   protected readonly notifications = inject(TuiNotificationService);
   private bookingsService = inject(BookingsService);
+  private analytics = inject(AnalyticsService);
   private router = inject(Router);
 
   readonly booking = signal<Booking | null>(null);
@@ -20,6 +22,7 @@ export class BookingDetailService {
     try {
       const booking = await this.bookingsService.getBooking(bookRef);
       this.booking.set(booking);
+      this.analytics.bookingViewed();
     } catch (error) {
       console.error('Failed to load booking', error);
       const status = error instanceof HttpErrorResponse ? error.status : undefined;
@@ -30,6 +33,7 @@ export class BookingDetailService {
       } else if (status === 403) {
         this.processError('You do not have access to this booking', 'Forbidden');
       } else {
+        Sentry.captureException(error);
         this.processError('Failed to load booking', 'Error');
       }
       this.booking.set(null);

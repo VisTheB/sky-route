@@ -13,7 +13,7 @@ import {
 import { TuiForm } from '@taiga-ui/layout';
 import { TuiDay, type TuiStringHandler } from '@taiga-ui/cdk';
 import { TuiInputDate, TuiChevron, TuiSelect } from '@taiga-ui/kit';
-import { NowService } from '../../core/services';
+import { NowService, AnalyticsService } from '../../core/services';
 import {
   FareConditions,
   FARE_CONDITIONS_LABELS,
@@ -53,6 +53,7 @@ export class SearchFormComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private nowService = inject(NowService);
+  private analytics = inject(AnalyticsService);
 
   minDate = signal<TuiDay | null>(null);
   maxDate = signal<TuiDay | null>(null);
@@ -108,6 +109,7 @@ export class SearchFormComponent implements OnInit {
     const value = this.searchForm.getRawValue();
     const dateStr = value.date!.toJSON();
 
+    this.analytics.searchPerformed();
     this.router.navigate(['routes', 'search'], {
       queryParams: {
         from: value.from.trim(),

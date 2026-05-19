@@ -8,6 +8,7 @@ import {
   Timestamp,
   getDoc,
 } from '@angular/fire/firestore';
+import * as Sentry from '@sentry/angular';
 import { AuthService } from './auth.service';
 import { PassportData, UserProfile } from '../models';
 
@@ -47,6 +48,7 @@ export class ProfileService {
         await this.createInitialProfile(uid);
       }
     } catch (err) {
+      Sentry.captureException(err);
       console.error('Failed to load profile', err);
       this.error.set('Failed to load profile');
     } finally {

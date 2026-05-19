@@ -1,6 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as Sentry from '@sentry/angular';
 import {
   TUI_VALIDATION_ERRORS,
   TuiButton,
@@ -125,11 +126,12 @@ export class ProfliePageComponent {
         .open('Passport updated successfully!', { label: 'Success', autoClose: 3000 })
         .subscribe();
     } catch (error) {
+      Sentry.captureException(error);
       console.error('Failed to save passport', error);
       this.notifications
         .open('Failed to save passport. Please try again.', {
           label: 'Error',
-          autoClose: 3000,
+          autoClose: 4000,
         })
         .subscribe();
     } finally {
@@ -142,8 +144,9 @@ export class ProfliePageComponent {
       await this.auth.logout();
       this.router.navigate(['/']);
     } catch (error) {
+      Sentry.captureException(error);
       this.notifications
-        .open('Failed to logout. Please try again.', { label: 'Error', autoClose: 3000 })
+        .open('Failed to logout. Please try again.', { label: 'Error', autoClose: 4000 })
         .subscribe();
       console.error('Logout failed', error);
     }

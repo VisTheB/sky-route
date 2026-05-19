@@ -1,4 +1,5 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
+import * as Sentry from '@sentry/angular';
 import { ScheduleTab, OutboundFlightEntry, InboundFlightEntry } from '../../core/models';
 import { AirportsService } from '../../core/services';
 import { TuiNotificationService } from '@taiga-ui/core';
@@ -86,6 +87,7 @@ export class AirportScheduleService {
         }
       }
     } catch (error) {
+      Sentry.captureException(error);
       console.error('Failed to load schedule', error);
       this.error.set('Failed to load schedule');
       this.notifications
