@@ -191,3 +191,11 @@
     }
   }
 }
+
+@media (max-width: 28rem) {
+  .table {
+    &__cell {
+      font-size: 0.7rem;
+    }
+  }
+}
