@@ -11,7 +11,6 @@ import * as Sentry from '@sentry/angular';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
-import { provideAnalytics, getAnalytics } from '@angular/fire/analytics';
 
 import { routes } from './app.routes';
 import { firebaseConfig } from '../environments/environment';
@@ -38,6 +37,5 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       inject(Sentry.TraceService);
     }),
-    provideAnalytics(() => getAnalytics()),
   ],
 };

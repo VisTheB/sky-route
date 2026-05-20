@@ -11,12 +11,10 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from '@angular/fire/auth';
-import { AnalyticsService } from './analytics.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private auth = inject(Auth);
-  private analytics = inject(AnalyticsService);
 
   currentUser = signal<User | null>(null);
   isLoading = signal(true);
@@ -51,7 +49,6 @@ export class AuthService {
   }
   async logout() {
     await signOut(this.auth);
-    this.analytics.authLogout();
   }
   async resetPassword(email: string) {
     await sendPasswordResetEmail(this.auth, email);

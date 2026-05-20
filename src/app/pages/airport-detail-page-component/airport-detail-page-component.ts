@@ -5,7 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { TuiLoader, TuiNotificationService } from '@taiga-ui/core';
 import { TuiCardLarge } from '@taiga-ui/layout';
 import { AirportDetails } from '../../core/models';
-import { AirportsService, AnalyticsService, YandexMetrikaService } from '../../core/services';
+import { AirportsService, YandexMetrikaService } from '../../core/services';
 import { AirportScheduleService } from './airport-schedule.service';
 import { AirportScheduleComponent } from './components/airport-schedule-component/airport-schedule-component';
 
@@ -20,7 +20,6 @@ export class AirportDetailPageComponent {
   protected readonly notifications = inject(TuiNotificationService);
   protected airScheduleService = inject(AirportScheduleService);
   private airportsService = inject(AirportsService);
-  private analytics = inject(AnalyticsService);
   private metricaService = inject(YandexMetrikaService);
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
@@ -61,7 +60,6 @@ export class AirportDetailPageComponent {
     try {
       const data = await this.airportsService.getByCode(code);
       this.airport.set(data);
-      this.analytics.airportViewed(code);
       this.metricaService.goal('airport viewed', { code: code });
       this.airScheduleService.init(code);
     } catch (error) {

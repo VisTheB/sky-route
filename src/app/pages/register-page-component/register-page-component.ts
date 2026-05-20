@@ -17,7 +17,7 @@ import {
   TUI_VALIDATION_ERRORS,
 } from '@taiga-ui/core';
 import { TuiCardLarge, TuiForm } from '@taiga-ui/layout';
-import { AuthService, AnalyticsService } from '../../core/services';
+import { AuthService } from '../../core/services';
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   const password = control.parent?.get('password')?.value;
@@ -55,7 +55,6 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
 })
 export class RegisterPageComponent {
   private auth = inject(AuthService);
-  private analytics = inject(AnalyticsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
@@ -86,7 +85,6 @@ export class RegisterPageComponent {
 
     try {
       await this.auth.registerWithEmail(email, password);
-      this.analytics.authSignup('email');
       this.redirectAfterReg();
     } catch (error) {
       this.errorMessage.set(this.getErrorMessage(error));
@@ -103,7 +101,6 @@ export class RegisterPageComponent {
 
     try {
       await this.auth.loginWithGoogle();
-      this.analytics.authSignup('google');
       this.redirectAfterReg();
     } catch (error) {
       this.errorMessage.set(this.getErrorMessage(error));

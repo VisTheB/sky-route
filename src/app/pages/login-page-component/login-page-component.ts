@@ -11,7 +11,7 @@ import {
   TuiTextfield,
 } from '@taiga-ui/core';
 import { TuiCardLarge, TuiForm } from '@taiga-ui/layout';
-import { AuthService, AnalyticsService } from '../../core/services';
+import { AuthService } from '../../core/services';
 
 @Component({
   selector: 'app-login-page-component',
@@ -40,7 +40,6 @@ import { AuthService, AnalyticsService } from '../../core/services';
 })
 export class LoginPageComponent {
   private auth = inject(AuthService);
-  private analytics = inject(AnalyticsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
@@ -64,7 +63,6 @@ export class LoginPageComponent {
 
     try {
       await this.auth.loginWithEmail(email, password);
-      this.analytics.authLogin('email');
       this.redirectAfterLogin();
     } catch (error) {
       this.errorMessage.set(this.getErrorMessage(error));
@@ -81,7 +79,6 @@ export class LoginPageComponent {
 
     try {
       await this.auth.loginWithGoogle();
-      this.analytics.authLogin('google');
       this.redirectAfterLogin();
     } catch (error) {
       this.errorMessage.set(this.getErrorMessage(error));

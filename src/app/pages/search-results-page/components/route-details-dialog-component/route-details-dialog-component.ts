@@ -8,7 +8,7 @@ import { injectContext } from '@taiga-ui/polymorpheus';
 import { DecimalPipe } from '@angular/common';
 import { RouteOption, FareConditions, RouteSegment } from '../../../../core/models';
 import { TimeWithTimezonePipe, DurationPipe } from '../../../../shared/pipes';
-import { BookingsService, BookingError, AnalyticsService } from '../../../../core/services';
+import { BookingsService, BookingError } from '../../../../core/services';
 
 export type RouteDetailsDialogData = {
   route: RouteOption;
@@ -30,7 +30,6 @@ export class RouteDetailsDialogComponent {
   protected readonly notifications = inject(TuiNotificationService);
   private router = inject(Router);
   private bookingsService = inject(BookingsService);
-  private analytics = inject(AnalyticsService);
 
   protected isBooking = signal(false);
   protected route = computed(() => this.context.data.route);
@@ -49,7 +48,6 @@ export class RouteDetailsDialogComponent {
   protected async onBook() {
     if (this.isBooking()) return;
 
-    this.analytics.bookingStarted();
     this.isBooking.set(true);
     try {
       const booking = await this.bookingsService.createBookingForCurrentUser(
@@ -57,7 +55,6 @@ export class RouteDetailsDialogComponent {
         this.fareClass(),
       );
 
-      this.analytics.bookingCompleted();
       this.context.$implicit.complete();
       this.router.navigate(['/bookings', booking.book_ref]);
     } catch (error) {
@@ -72,7 +69,6 @@ export class RouteDetailsDialogComponent {
   }
 
   private handleBookingError(error: unknown) {
-    this.analytics.bookingFailed();
     if (error instanceof BookingError && error.code === 'NO_PASSPORT') {
       this.context.$implicit.complete();
       this.notifications

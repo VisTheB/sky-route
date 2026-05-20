@@ -10,7 +10,7 @@ import {
 } from '@taiga-ui/core';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import { BoardingPass, CheckInDialogData, AvailableSeat, Mode } from '../../../../core/models';
-import { CheckinService, AnalyticsService } from '../../../../core/services';
+import { CheckinService } from '../../../../core/services';
 
 @Component({
   selector: 'app-checkin-dialog-component',
@@ -22,7 +22,6 @@ export class CheckinDialogComponent {
   protected readonly context =
     injectContext<TuiDialogContext<BoardingPass | null, CheckInDialogData>>();
   private checkinService = inject(CheckinService);
-  private analytics = inject(AnalyticsService);
   protected readonly notifications = inject(TuiNotificationService);
 
   protected isLoading = signal(false);
@@ -125,7 +124,6 @@ export class CheckinDialogComponent {
         seat_no: this.selectedSeat() ?? undefined,
       });
       this.boardingPass.set(pass);
-      this.analytics.onlineCheckinCompleted();
       this.context.$implicit.next(pass);
       this.mode.set('pass');
       this.notifications

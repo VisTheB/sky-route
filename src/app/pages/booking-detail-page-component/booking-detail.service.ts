@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { TuiNotificationService } from '@taiga-ui/core/components/notification';
 import { HttpErrorResponse } from '@angular/common/http';
 import * as Sentry from '@sentry/angular';
-import { BookingsService, AnalyticsService } from '../../core/services';
+import { BookingsService } from '../../core/services';
 import { Booking } from '../../core/models';
 import { Router } from '@angular/router';
 
@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
 export class BookingDetailService {
   protected readonly notifications = inject(TuiNotificationService);
   private bookingsService = inject(BookingsService);
-  private analytics = inject(AnalyticsService);
   private router = inject(Router);
 
   readonly booking = signal<Booking | null>(null);
@@ -22,7 +21,6 @@ export class BookingDetailService {
     try {
       const booking = await this.bookingsService.getBooking(bookRef);
       this.booking.set(booking);
-      this.analytics.bookingViewed();
     } catch (error) {
       console.error('Failed to load booking', error);
       const status = error instanceof HttpErrorResponse ? error.status : undefined;
