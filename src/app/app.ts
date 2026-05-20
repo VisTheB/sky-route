@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @angular-eslint/prefer-inject */
 import { TuiRoot } from '@taiga-ui/core';
 import { Component, signal } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-
-declare const ym: any;
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -14,11 +10,4 @@ declare const ym: any;
 })
 export class App {
   protected readonly title = signal('sky-route');
-  constructor(private router: Router) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        ym(109305966, 'hit', event.urlAfterRedirects);
-      }
-    });
-  }
 }
