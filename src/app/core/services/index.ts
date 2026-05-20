@@ -5,4 +5,3 @@ export { ProfileService } from './profile.service';
 export * from './api/bookings.service';
 export * from './api/checkin.service';
 export { AirportsService } from './api/airports.service';
-export { YandexMetrikaService } from './yandex_metrika/yandex.metrika.service';

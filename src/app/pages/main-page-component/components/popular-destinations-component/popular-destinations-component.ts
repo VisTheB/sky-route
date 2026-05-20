@@ -1,7 +1,7 @@
 import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TuiDay } from '@taiga-ui/cdk';
-import { NowService, YandexMetrikaService } from '../../../../core/services';
+import { NowService } from '../../../../core/services';
 
 type Card = {
   title: string;
@@ -18,11 +18,7 @@ type Card = {
 })
 export class PopularDestinationsComponent implements OnInit, OnDestroy {
   private nowService = inject(NowService);
-  private metricaService = inject(YandexMetrikaService);
 
-  protected onCardClick(title: string) {
-    this.metricaService.goal('popular destination clicked', { title });
-  }
   date = signal<TuiDay | null>(null);
   private readonly imgPath = '/popular/';
   private autoplayId: ReturnType<typeof setInterval> | null = null;

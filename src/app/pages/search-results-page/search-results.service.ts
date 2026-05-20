@@ -1,12 +1,11 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import * as Sentry from '@sentry/angular';
 import { EMPTY_FILTERS, Filters, SortKey, SearchParams, RouteOption } from '../../core/models';
-import { SearchService, YandexMetrikaService } from '../../core/services';
+import { SearchService } from '../../core/services';
 
 @Injectable()
 export class SearchResultsService {
   private searchService = inject(SearchService);
-  private metricaService = inject(YandexMetrikaService);
 
   readonly rawResults = signal<RouteOption[]>([]);
   readonly isLoading = signal(false);
@@ -92,9 +91,6 @@ export class SearchResultsService {
     try {
       const response = await this.searchService.search(params);
       this.rawResults.set(response);
-      if (response.length === 0) {
-        this.metricaService.goal('search no results', { no_results: true });
-      }
     } catch (error) {
       console.error('Search failed', error);
       this.rawResults.set([]);

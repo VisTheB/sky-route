@@ -4,8 +4,15 @@
       <a routerLink="/" (click)="closeMenu()">SkyRoute</a>
     </div>
 
-    <button type="button" class="header__burger" [class.is-open]="menuOpen()" [attr.aria-expanded]="menuOpen()"
-      aria-controls="header-menu" aria-label="Toggle navigation menu" (click)="toggleMenu()">
+    <button
+      type="button"
+      class="header__burger"
+      [class.is-open]="menuOpen()"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="header-menu"
+      aria-label="Toggle navigation menu"
+      (click)="toggleMenu()"
+    >
       <span></span>
       <span></span>
       <span></span>
@@ -13,29 +20,46 @@
 
     <div id="header-menu" class="header__menu" [class.is-open]="menuOpen()">
       <nav class="header__nav">
-        <a routerLink="/airports" routerLinkActive="active" class="header__link" (click)="closeMenu()">Airports</a>
+        <a
+          routerLink="/airports"
+          routerLinkActive="active"
+          class="header__link"
+          (click)="closeMenu()"
+          >Airports</a
+        >
       </nav>
       <div class="header__user">
         @if (auth.isAuthenticated()) {
-        <a routerLink="/bookings" routerLinkActive="active" class="header__link" (click)="closeMenu()">My Bookings</a>
-        <a routerLink="/profile" routerLinkActive="active" class="header__user-info" (click)="closeMenu()">
-          @if (auth.userPhotoURL()) {
-          <img [src]="auth.userPhotoURL()" alt="profile photo" />
-          }
-          <span>{{ auth.userDisplayName() ?? auth.userEmail() }}</span>
-        </a>
-        <button tuiButton type="button" size="m" class="header__button" (click)="logout()">
-          Logout
-        </button>
+          <a
+            routerLink="/bookings"
+            routerLinkActive="active"
+            class="header__link"
+            (click)="closeMenu()"
+            >My Bookings</a
+          >
+          <a
+            routerLink="/profile"
+            routerLinkActive="active"
+            class="header__user-info"
+            (click)="closeMenu()"
+          >
+            @if (auth.userPhotoURL()) {
+              <img [src]="auth.userPhotoURL()" alt="profile photo" />
+            }
+            <span>{{ auth.userDisplayName() ?? auth.userEmail() }}</span>
+          </a>
+          <button tuiButton type="button" size="m" class="header__button" (click)="logout()">
+            Logout
+          </button>
         } @else {
-        <div class="header__auth">
-          <a routerLink="/login" (click)="closeMenu()">
-            <button tuiButton type="button" size="m" class="header__button">Login</button>
-          </a>
-          <a routerLink="/register" (click)="closeMenu()">
-            <button tuiButton type="button" size="m" class="header__button">Register</button>
-          </a>
-        </div>
+          <div class="header__auth">
+            <a routerLink="/login" (click)="closeMenu()">
+              <button tuiButton type="button" size="m" class="header__button">Login</button>
+            </a>
+            <a routerLink="/register" (click)="closeMenu()">
+              <button tuiButton type="button" size="m" class="header__button">Register</button>
+            </a>
+          </div>
         }
       </div>
     </div>
