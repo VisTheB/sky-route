@@ -58,3 +58,9 @@ form {
     margin-top: 0.5rem;
   }
 }
+
+@media (max-width: 28rem) {
+  form {
+    width: 100%;
+  }
+}

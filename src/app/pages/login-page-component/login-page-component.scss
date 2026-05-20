@@ -58,3 +58,9 @@ form {
     letter-spacing: 0.125rem;
   }
 }
+
+@media (max-width: 28rem) {
+  form {
+    width: 100%;
+  }
+}
